@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <meta charset="utf-8">
+  <title>Book Catalog</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('bookCtrl', function($scope) {
+
+      $scope.books = [
+        { title: "AngularJS for Beginners", author: "John Doe", price: 19.99 },
+        { title: "HTML5 and CSS3", author: "Jane Smith", price: 24.99 },
+        { title: "JavaScript: The Good Parts", author: "Douglas Crockford", price: 29.99 }
+      ];
+
+      $scope.newBook = {};
+
+      $scope.addBook = function() {
+        $scope.books.push($scope.newBook);
+        $scope.newBook = {};
+        $scope.bookForm.$setPristine();
+      };
+
+      $scope.deleteBook = function(book) {
+        var index = $scope.books.indexOf(book);
+        $scope.books.splice(index, 1);
+      };
+
+      $scope.getTotalPrice = function() {
+        var total = 0;
+        for(var i = 0; i < $scope.books.length; i++){
+          total += $scope.books[i].price;
+        }
+        return total;
+      };
+
+    });
+  </script>
+</head>
+
+<body>
+
+  <div ng-controller="bookCtrl" class="container">
+
+<h1 class="text-center, display-2">My Bookshelf</h1>
+<hr>
+	<div class="row">
+			<div class="col-md-6">
+				<h2 class="display-4">Add Book</h2>
+    <form name="bookForm" novalidate>
+	<div class="form-group">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" ng-model="newBook.title" class="form-control" required>
+	</div>
+<div class="form-group">
+      <label for="author">Author:</label>
+      <input type="text" id="author" name="author" ng-model="newBook.author" class="form-control" required>
+</div>
+<div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" ng-model="newBook.price" class="form-control" required>
+</div>
+      <button type="button" ng-click="addBook()" ng-disabled="bookForm.$invalid" class="btn btn-primary">Add Book</button>
+    </form>
+</div>
+
+<div class="col-md-6">
+<h2 class="display-4">Book List</h2>
+    <table class="table">
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th></th>
+      </tr>
+      <tr ng-repeat="book in books">
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.price | currency}}</td>
+        <td><button type="button" ng-click="deleteBook(book)" class="btn btn-danger btn-sm">Delete</button></td>
+      </tr>
+      <tr>
+        <td colspan="2">Total Price:</td>
+        <td>{{getTotalPrice() | currency}}</td>
+        <td></td>
+      </tr>
+    </table>
+</div>
+<p class="text-muted">*Note: Some test books are pre-defined for example use only.</p>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
